@@ -10,6 +10,8 @@ define(function () {
             'fx-m-c/config' : '../../config',
             'fx-m-c/adapters' : './adapters',
             'fx-m-c/templates' : './templates',
+            'fx-m-c/nls' : '../../i18n',
+
             // third party libs
             text: '{FENIX_CDN}/js/requirejs/plugins/text/2.0.12/text',
             jquery: '{FENIX_CDN}/js/jquery/2.1.1/jquery.min',

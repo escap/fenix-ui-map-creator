@@ -4,13 +4,18 @@ define([
         'handlebars',
         'loglevel',
         //'text!fx-m-c/html/templates/base_template.hbs'
-        'text!fx-m-c/html/templates/custom_template.hbs'
+        'text!fx-m-c/html/templates/custom_template.hbs',
+        'i18n!fx-m-c/nls/translate'
     ],
-    function ($, Handlebars, log, template) {
+    function ($, Handlebars, log, template, i18n) {
 
         'use strict';
 
-        var defaultOptions = {};
+        var defaultOptions = {
+            s: {
+                CONTENT: '[data-role="content"]'
+            }
+        };
 
         function Base_template() {
             $.extend(true, this, defaultOptions);
@@ -33,6 +38,12 @@ define([
             var t = Handlebars.compile(template);
             this.$container.html(t(this.template || {}));
 
+        };
+
+        Base_template.prototype.noDataAvailable = function () {
+            // TODO: fix it the multilanguage and hardcoded style.
+            this.$container.find(this.s.CONTENT).html("<div style='padding: 15px;'>" + i18n.no_data_available + "</div>");
+            this.$container.find(this.s.CONTENT).height('auto');
         };
 
         Base_template.prototype._initVariable = function () {

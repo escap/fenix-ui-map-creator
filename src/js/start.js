@@ -1,4 +1,4 @@
-/*global define*/
+/*global define, amplify*/
 define(['require',
         'jquery',
         'loglevel',
@@ -70,19 +70,19 @@ define(['require',
             if (adapterType !== null && adapterType !== undefined) {
                 switch (adapterType.toLocaleLowerCase()) {
                     case 'fenix':
-                        return this.adapterUrl ? this.adapterUrl : 'fx-m-c/adapters/FENIX_fx_map';
+                        return this.adapterUrl || 'fx-m-c/adapters/FENIX_fx_map';
                     case 'faostat':
-                        return this.adapterUrl ? this.adapterUrl : 'fx-m-c/adapters/FAOSTAT_fx_map';
+                        return this.adapterUrl || 'fx-m-c/adapters/FAOSTAT_fx_map';
                 }
             }
             else {
-                return this.adapterUrl ? this.adapterUrl : 'fx-m-c/adapters/FENIX_fx_map';
+                return this.adapterUrl || 'fx-m-c/adapters/FENIX_fx_map';
             }
         };
 
         MapCreator.prototype.getTemplateUrl = function () {
             //TODO add here template discovery logic
-            return this.templateUrl ? this.templateUrl : 'fx-m-c/templates/base_template';
+            return this.templateUrl || 'fx-m-c/templates/base_template';
         };
 
         MapCreator.prototype._validateInput = function () {
@@ -102,6 +102,12 @@ define(['require',
             return this.adapter.addLayer(model, layerOptions, modelOptions);
         };
 
+        // TODO: dirty no data available
+        MapCreator.prototype.noDataAvailable = function () {
+            log.info('MapCreator.noDataAvailable;');
+            this.template.noDataAvailable();
+        };
+
         MapCreator.prototype.removeLayer = function (layer) {
             return this.adapter.removeLayer(layer);
         };
@@ -112,10 +118,14 @@ define(['require',
 
         MapCreator.prototype.invalidateSize = function () {
 
-            log.info('invalidateSize', this.template.template.title)
+            log.info('MapCreator.invalidateSize;', this.template.template.title);
             // dirty fix for invalidate size
             return this.adapter.invalidateSize();
 
+        };
+
+        MapCreator.prototype.addLayer = function (model, layerOptions, modelOptions) {
+            return this.adapter.addLayer(model, layerOptions, modelOptions);
         };
 
         MapCreator.prototype.bindEventListeners = function () {
@@ -132,7 +142,7 @@ define(['require',
 
         MapCreator.prototype.destroy = function () {
 
-            log.info('Map creator destroy ', this.template.template.title)
+            log.info('MapCreator.destroy;', this.template.template.title);
 
             this.unbindEventListeners();
 
