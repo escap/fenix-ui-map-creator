@@ -5,7 +5,7 @@ define(function () {
     'use strict';
 
     return {
-        WMS_URL: "http://fenix.fao.org/geoserver"
+        WMS_URL: "http://fenix.fao.org/faostat/geoserver"
     };
 
 });
