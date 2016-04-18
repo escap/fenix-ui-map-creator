@@ -36,7 +36,7 @@ define([
         Base_template.prototype._injectTemplate = function () {
 
             var t = Handlebars.compile(template);
-            this.$container.html(t(this.template || {}));
+            this.$container.html(t($.extend({}, true, i18n, this.template || {})));
 
         };
 
