@@ -174,117 +174,7 @@ define([
             return layer;
         };
 
-        // JOIN
-        FAOSTAT_FX_MAP_Adapter.prototype.createLayerFenixJoin = function (model) {
-            if (this._validateJoinInput(model) === true) {
-                // create the join layer
-                var layer = this.getJoinLayerFenix(model);
-                $.extend(true, layer, this.o.join.style);
-
-                // Layer title TODO: Add title if exist (check in the validator)
-                if (model['metadata'].hasOwnProperty("title")) {
-                    if (model['metadata']['title'][this.o.lang] !== null) {
-                        layer.layertitle = model['metadata']['title'][this.o.lang];
-                    }
-                }
-                else {
-                    layer.layertitle = model['metadata']['uid'];
-                }
-
-                log.info(model)
-
-                // create popup
-                // TODO: Handle more dinamically from the model 'geo' codelist.
-                layer.customgfi = {
-                    content: {
-                        EN: "<div class='fm-popup'>{{"+ layer.joincolumnlabel +"}}<div class='fm-popup-join-content'>{{{"+ layer.joincolumn + "}}} {{measurementunit}}</div></div>"
-                    },
-                    showpopup: true
-                };
-
-                // TODO: add check on the zoomto data (move it to a function)
-                var codes = []
-                layer.joindata.forEach(function (code) {
-                    _.keys(code).forEach(function (key) {
-                        codes.push(key);
-                    });
-                });
-                var zoomlayer = layer.layers.split(":");
-                zoomlayer = zoomlayer.length > 1? zoomlayer[1]: zoomlayer[0];
-                this.fenixMap.zoomTo(zoomlayer, layer.joincolumn, codes);
-                return layer;
-            } else {
-                log.error(this.errors);
-                throw new Error("FENIX Map creator has not a valid JOIN configuration");
-            }
-        };
-
-        FAOSTAT_FX_MAP_Adapter.prototype.getJoinLayerFenix = function (model, modelOptions) {
-            var metadata = model['metadata'];
-            var columns = metadata['dsd']['columns'];
-            var geoColumn = {};
-            var valueColumn = {};
-            var muColumn = {};
-            columns.forEach(_.bind(function (column, index) {
-                if (column.subject === this.o.geoSubject || column.id === this.o.geoSubject ) {
-                    geoColumn = column;
-                    geoColumn.index = index;
-                    geoColumn.index = index;
-                }
-                if (column.subject === this.o.valueSubject) {
-                    valueColumn = column;
-                    valueColumn.index = index;
-                }
-                if (column.subject === this.o.muSubject) {
-                    muColumn = column;
-                    muColumn.index = index;
-                }
-            }, this));
-
-
-            if (this._validateJoinColumnInputFenix(geoColumn)) {
-                // TODO: check reference area and if exist the variable geoColumn['domain']['codes'][0].idCodeList
-                //var layer = this.join.layerMapping[geoColumn['domain']['codes'][0].idCodeList.toLowerCase()];
-                var layer = null;
-                var codelist = geoColumn['domain']['codes'][0].idCodeList.toLowerCase();
-
-                // if codelist has a mapping with the join.layerMapping then use it.
-                if (this.o.join.layerMapping[codelist]) {
-                    layer = this.o.join.layerMapping[codelist];
-                }
-
-                // else check with the referenceArea the right correspondacy
-                else {
-                    geoColumn['domain']['codes'][0].idCodeList.toLowerCase();
-                    // TODO: Handle reference Area
-                    var referenceArea = metadata["meContent"]["seReferencePopulation"]["referenceArea"]['codes'][0].code.toLowerCase();
-                    layer = this.o.join.layerMapping[codelist + "_" + referenceArea];
-                }
-
-                // data model to be mapped
-                var data = model.data;
-
-
-                // check measurementunit
-                // TODO: Add measurement unit to the layer definition (using label column of the mu)
-                //
-
-                // get joinData
-                layer.joindata = this.getJoinData(data, geoColumn.index, valueColumn.index);
-
-                // TODO: check on the column index
-                layer.measurementunit = data[0][muColumn.index];
-
-                // TODO: check if is the right legendtitle
-                layer.legendtitle = layer.measurementunit;
-
-                return layer;
-            } else{
-                log.error('Error JoinColumnInput not valid')
-            }
-        };
-
-        FAOSTAT_FX_MAP_Adapter.prototype.createLayerFaostatJoin = function (model, modelOptions) {
+               FAOSTAT_FX_MAP_Adapter.prototype.createLayerFaostatJoin = function (model, modelOptions) {
 
             if (this._validateJoinInput(model) === true) {
                 // create the join layer
@@ -295,7 +185,7 @@ define([
                 // TODO: Handle more dinamically from the model 'geo' codelist.
                 layer.customgfi = {
                     content: {
-                        EN: "<div class='fm-popup'>{{"+ layer.joincolumnlabel +"}}<div class='fm-popup-join-content'>{{{"+ layer.joincolumn + "}}}</div></div>"
+                        EN: "<div class='fm-popup'><h5>{{"+ layer.joincolumnlabel +"}}</h5><h4 style='color:#337ab7;'>{{{"+ layer.joincolumn + "}}} <small style='color:#47576F;'>{{measurementunit}}</small></h4></div>"
                         //EN: "<div class='fm-popup'>{{"+ layer.joincolumnlabel +"}}<div class='fm-popup-join-content'>{{{"+ layer.joincolumn + "}}} {{measurementunit}}</div></div>"
                     },
                     showpopup: true
