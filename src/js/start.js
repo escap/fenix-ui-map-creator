@@ -1,5 +1,5 @@
 /*global define, amplify*/
-define(['require',
+define([//'require',
         'jquery',
         'loglevel',
         'q',
@@ -9,7 +9,7 @@ define(['require',
         'fx-m-c/adapters/FAOSTAT_fx_map',
         'amplify'
     ],
-    function (RequireJS, $, log, Q, E) {
+    function ($, log, Q, E, Template, Adapter) {
 
         'use strict';
 
@@ -41,48 +41,19 @@ define(['require',
 
         MapCreator.prototype.preloadResources = function ( config ) {
 
-            var baseTemplate = this.getTemplateUrl(),
-                adapter =  this.getAdapterUrl((config.adapter) ? config.adapter.adapterType : null),
-                self = this;
+            this.template = new Template();
+            this.adapter = new Adapter();
 
-            RequireJS([
-                baseTemplate,
-                adapter
-            ], function (Template, Adapter) {
+            //currently both of them are sync fns
+            this.template.render(config);
+            this.adapter.render(config);
 
-                self.template = new Template();
-                self.adapter = new Adapter();
-
-                //currently both of them are sync fns
-                self.template.render(config);
-                self.adapter.render(config);
-
-                if (typeof config.onReady === 'function') {
-                    config.onReady(self);
-                }
-
-                self.deferred.resolve(self);
-            });
-        };
-
-        MapCreator.prototype.getAdapterUrl = function (adapterType) {
-            //TODO add here adapter discovery logic
-            if (adapterType !== null && adapterType !== undefined) {
-                switch (adapterType.toLocaleLowerCase()) {
-                    case 'fenix':
-                        return this.adapterUrl || 'fx-m-c/adapters/FENIX_fx_map';
-                    case 'faostat':
-                        return this.adapterUrl || 'fx-m-c/adapters/FAOSTAT_fx_map';
-                }
+            if (typeof config.onReady === 'function') {
+                config.onReady(this);
             }
-            else {
-                return this.adapterUrl || 'fx-m-c/adapters/FENIX_fx_map';
-            }
-        };
 
-        MapCreator.prototype.getTemplateUrl = function () {
-            //TODO add here template discovery logic
-            return this.templateUrl || 'fx-m-c/templates/base_template';
+            this.deferred.resolve(this);
+
         };
 
         MapCreator.prototype._validateInput = function () {
