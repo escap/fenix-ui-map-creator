@@ -174,7 +174,7 @@ define([
             return layer;
         };
 
-        FAOSTAT_FX_MAP_Adapter.prototype.createLayerFaostatJoin = function (model, modelOptions) {
+               FAOSTAT_FX_MAP_Adapter.prototype.createLayerFaostatJoin = function (model, modelOptions) {
 
             if (this._validateJoinInput(model) === true) {
                 // create the join layer
@@ -239,7 +239,7 @@ define([
 
                 var layerMapping = modelOptions.layerMapping || "faostat";
 
-                var layer = this.o.join.layerMapping[layerMapping][modelOptions.lang || 'en'] || this.o.join.layerMapping[layerMapping]['en'];
+                var layer = this.o.join.layerMapping[layerMapping][modelOptions.lang || 'en'];
 
                 // data model to be mapped
                 var data = model.data;
