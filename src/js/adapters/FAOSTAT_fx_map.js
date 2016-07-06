@@ -174,7 +174,7 @@ define([
             return layer;
         };
 
-               FAOSTAT_FX_MAP_Adapter.prototype.createLayerFaostatJoin = function (model, modelOptions) {
+        FAOSTAT_FX_MAP_Adapter.prototype.createLayerFaostatJoin = function (model, modelOptions) {
 
             if (this._validateJoinInput(model) === true) {
                 // create the join layer
