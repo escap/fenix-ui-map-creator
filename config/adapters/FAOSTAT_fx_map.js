@@ -98,6 +98,21 @@ define(['fx-m-c/config/config', 'fx-m-c/config/config-default'],function (C,DC) 
                         layers: 'fenix:gaul0_faostat_3857',
                         joincolumn: 'faost_code',
                         joincolumnlabel: 'areanames'
+                    },
+                    'ru': {
+                        layers: 'fenix:gaul0_faostat_3857',
+                        joincolumn: 'faost_code',
+                        joincolumnlabel: 'areanamee'
+                    },
+                    'ar': {
+                        layers: 'fenix:gaul0_faostat_3857',
+                        joincolumn: 'faost_code',
+                        joincolumnlabel: 'areanamee'
+                    },
+                    'zh': {
+                        layers: 'fenix:gaul0_faostat_3857',
+                        joincolumn: 'faost_code',
+                        joincolumnlabel: 'areanamee'
                     }
                 }
             },
