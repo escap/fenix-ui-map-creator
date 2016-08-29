@@ -13,9 +13,7 @@ define([//'require',
 
         'use strict';
 
-        var defaultOptions = {
-            default: ''
-        };
+        var defaultOptions = {};
 
         function MapCreator() {
             $.extend(true, this, defaultOptions);
@@ -113,7 +111,7 @@ define([//'require',
 
         MapCreator.prototype.destroy = function () {
 
-            log.info('MapCreator.destroy;', this.template.template.title);
+            //log.info('MapCreator.destroy;', this.template.template.title);
 
             this.unbindEventListeners();
 
